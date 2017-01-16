@@ -15,7 +15,8 @@ public class Oficialia {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Email alan = new Email("alanlopez1995@hotmail.com", "Soyelnumero2",Host.HOTMAIL);
+        Email alan = new Email("alanlopez1995@hotmail.com", "Soyegglnumero2",Host.HOTMAIL);
+        alan.sendMail("alanlopez1995@hotmail.com", "prueba", "Prueba correo ubuntu");
     }
     
 }

@@ -5,6 +5,8 @@
  */
 package oficialia;
 
+import java.awt.Color;
+
 /**
  *
  * @author Héctor Alan López Díaz <alanlopez1995@hotmail.com>
@@ -16,6 +18,7 @@ public class Usuario extends javax.swing.JFrame {
      */
     public Usuario() {
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
     }
 
     /**

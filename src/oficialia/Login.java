@@ -5,6 +5,12 @@
  */
 package oficialia;
 
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Héctor Alan López Díaz <alanlopez1995@hotmail.com>
@@ -14,6 +20,9 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+    String sEmail;
+    String sPassword;
+
     public Login() {
         initComponents();
     }
@@ -30,7 +39,11 @@ public class Login extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         logo = new javax.swing.JLabel();
         emailLabel = new javax.swing.JLabel();
-        emailTextField = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        emailLabel1 = new javax.swing.JLabel();
+        password = new javax.swing.JPasswordField();
+        server = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -40,29 +53,70 @@ public class Login extends javax.swing.JFrame {
 
         emailLabel.setText("Correo:");
 
+        email.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                emailKeyReleased(evt);
+            }
+        });
+
+        jButton1.setText("Ingresar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        emailLabel1.setText("Contraseña:");
+
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                passwordKeyReleased(evt);
+            }
+        });
+
+        server.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Conafor", "Gmail", "Hotmail" }));
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .add(167, 167, 167)
-                .add(emailLabel)
-                .add(34, 34, 34)
-                .add(emailTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 268, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 148, Short.MAX_VALUE)
-                .add(logo)
-                .add(138, 138, 138))
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(emailLabel)
+                    .add(emailLabel1)
+                    .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 80, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(33, 33, 33)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                            .add(password)
+                            .add(email, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 182, Short.MAX_VALUE)
+                        .add(logo)
+                        .add(138, 138, 138))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(server, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 160, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .add(304, 304, 304)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(emailTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(email, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(emailLabel))
+                .add(21, 21, 21)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(emailLabel1)
+                    .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(18, 18, 18)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(server, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButton1))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(148, Short.MAX_VALUE)
+                .addContainerGap(172, Short.MAX_VALUE)
                 .add(logo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 164, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(369, 369, 369))
         );
@@ -71,21 +125,90 @@ public class Login extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(51, 51, 51))
+            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        login();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void emailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_emailKeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            login();
+        }
+    }//GEN-LAST:event_emailKeyReleased
+
+    private void passwordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            login();
+        }
+    }//GEN-LAST:event_passwordKeyReleased
+
+    private boolean login() {
+        int selection = server.getSelectedIndex();
+        String host = "";
+        String consulta = "select tipo from usuario where usuario_id='" + email.getText() + "';";
+        String tipo = "";
+        MySqlConn objConn = new MySqlConn();
+        objConn.Consult(consulta);
+        int n = 0;
+        if (objConn.rs != null) {
+            try {
+                objConn.rs.last();
+                n = objConn.rs.getRow();
+                objConn.rs.first();
+            } catch (Exception e) {
+            }
+        }
+        if(n==0){ // usuario no registrado en la base de datos
+            JOptionPane.showMessageDialog(null,
+                    "No se encontro la informacion en la base de datos, consulta al administrador.",
+                    "Usuario no registrado!",
+                    JOptionPane.ERROR_MESSAGE);
+            objConn.desConnect();
+            return false;
+        }
+        switch (selection) {
+            case 0:
+            case 1:
+                host = Host.GMAIL;
+                break;
+            case 2:
+                host = Host.HOTMAIL;
+        }
+        Email tempLogin = new Email(email.getText(), new String(password.getPassword()), host);
+        if (!tempLogin.login) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al iniciar sesion, email o contraseña incorrectos!.",
+                    "Error!",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                tipo = objConn.rs.getString(1);
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if(tipo.equals("ADMINISTRADOR")){
+                new Administrador().setVisible(true);
+                this.dispose();
+            }else{
+                new Usuario().setVisible(true);
+                this.dispose();
+            }
+        }
+        objConn.desConnect();
+        return true;
+    }
 
     /**
      * @param args the command line arguments
@@ -123,9 +246,13 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField email;
     private javax.swing.JLabel emailLabel;
-    private javax.swing.JTextField emailTextField;
+    private javax.swing.JLabel emailLabel1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel logo;
+    private javax.swing.JPasswordField password;
+    private javax.swing.JComboBox<String> server;
     // End of variables declaration//GEN-END:variables
 }

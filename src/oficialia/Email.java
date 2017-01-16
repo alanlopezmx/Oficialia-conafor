@@ -31,7 +31,7 @@ public class Email {
     private int port;
     private Properties props = new Properties();
     private Session session;
-    private boolean login;
+    public boolean login;
     public Email(String email, String password, String host, int port){
         this.email = email;
         this.password = password;
@@ -57,13 +57,14 @@ public class Email {
         });
         Transport transport = null;
         try {
-            transport = session.getTransport();
-            transport.connect();
+            transport = session.getTransport("smtp");
+            transport.connect(host,email,password);
+            transport.close();
         } catch (AuthenticationFailedException e) {
             System.out.println("Error al iniciar sesion");
             return false;
         } catch(MessagingException e){
-            System.out.println("Cualquier otro error");
+            System.out.println("Cualquier otro error:" + e);
             return false;
         }
         System.out.println("Inicio correcto de sesion");

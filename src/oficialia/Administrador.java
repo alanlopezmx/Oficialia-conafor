@@ -5,6 +5,8 @@
  */
 package oficialia;
 
+import java.awt.Color;
+
 /**
  *
  * @author Héctor Alan López Díaz <alanlopez1995@hotmail.com>
@@ -16,6 +18,7 @@ public class Administrador extends javax.swing.JFrame {
      */
     public Administrador() {
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
     }
 
     /**
