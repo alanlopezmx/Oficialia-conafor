@@ -6,6 +6,7 @@
 package oficialia;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,6 +31,7 @@ public class Usuario extends javax.swing.JFrame {
     public Usuario() {
         initComponents();
         getContentPane().setBackground(Color.WHITE);
+        initRemitente();
     }
 
     /**
@@ -48,13 +51,12 @@ public class Usuario extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         ruta = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         jLabel1.setText("Remitente");
-
-        remitente.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel2.setText("Asunto");
 
@@ -76,47 +78,49 @@ public class Usuario extends javax.swing.JFrame {
 
         ruta.setEditable(false);
 
+        jButton3.setText("Ver Imagen");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(layout.createSequentialGroup()
-                        .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, Short.MAX_VALUE))
+                        .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(ruta))
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(32, 32, 32)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(layout.createSequentialGroup()
-                                .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(ruta, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 281, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(0, 0, Short.MAX_VALUE))
+                                .add(jLabel1)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(remitente, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 226, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                             .add(layout.createSequentialGroup()
-                                .add(32, 32, 32)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                    .add(layout.createSequentialGroup()
-                                        .add(jLabel1)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .add(remitente, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 226, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                    .add(layout.createSequentialGroup()
-                                        .add(jLabel2)
-                                        .add(53, 53, 53)
-                                        .add(asunto, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 229, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                                .add(18, 18, 18)))
-                        .add(jLabel3)))
+                                .add(jLabel2)
+                                .add(53, 53, 53)
+                                .add(asunto, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 229, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
+                .add(18, 18, 18)
+                .add(jButton3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel3)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
+                .add(29, 29, 29)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel3)
                     .add(layout.createSequentialGroup()
-                        .add(20, 20, 20)
-                        .add(jLabel3))
-                    .add(layout.createSequentialGroup()
-                        .add(29, 29, 29)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(asunto, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(jLabel2))
@@ -127,10 +131,11 @@ public class Usuario extends javax.swing.JFrame {
                         .add(18, 18, 18)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jButton1)
-                            .add(ruta, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
-                .add(1, 1, 1)
-                .add(jButton2)
-                .addContainerGap(219, Short.MAX_VALUE))
+                            .add(ruta, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jButton3))
+                        .add(28, 28, 28)
+                        .add(jButton2)))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
 
         pack();
@@ -148,8 +153,8 @@ public class Usuario extends javax.swing.JFrame {
                 fis = new FileInputStream(file);
                 statement = objConn.prepareStatement(consulta);
                 statement.setString(1,asunto.getText());
-                System.out.println(remitente.getSelectedItem().toString());
-                statement.setString(2,remitente.getSelectedItem().toString());
+                String remit[] = remitente.getSelectedItem().toString().split("-");
+                statement.setString(2,remit[1] + "-" + remit[2]);
                 statement.setInt(4,0);
                 statement.setInt(5,0);
                 statement.setBinaryStream(3, fis,(int)file.length());
@@ -165,7 +170,8 @@ public class Usuario extends javax.swing.JFrame {
                     Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-            }  
+            }
+            limpiarCampos();
         }else{
             JOptionPane.showMessageDialog(null,
                     "Faltan campos por rellenar!",
@@ -174,6 +180,36 @@ public class Usuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void initRemitente(){
+        MySqlConn objConn = new MySqlConn();
+        String consulta = "select * from trabajador;";
+        objConn.Consult(consulta);
+        int n = 0;
+        if (objConn.rs != null) {
+            try {
+                objConn.rs.last();
+                n = objConn.rs.getRow();
+                objConn.rs.first();
+            } catch (Exception e) {
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            try {
+                remitente.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getString(2) + " " + objConn.rs.getString(3) + "-" + objConn.rs.getString(7));
+                objConn.rs.next();
+            } catch (SQLException ex) {
+                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        remitente.setSelectedIndex(0);
+        objConn.desConnect();
+    }
+    
+    private void limpiarCampos(){
+        asunto.setText("");
+        ruta.setText("");
+    }
+    
     private boolean noVacio(){
         if(asunto.getText().isEmpty() || ruta.getText().isEmpty()){
             return false;
@@ -193,6 +229,24 @@ public class Usuario extends javax.swing.JFrame {
            System.out.println("You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if(ruta.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null,
+                    "Primero Carga una imagen!",
+                    "Error.",
+                    JOptionPane.ERROR_MESSAGE);
+        }else{
+            try {
+                File file = new File(ruta.getText());
+                BufferedImage img = ImageIO.read(file);
+                new ImageViewer(img);
+            } catch (IOException ex) {
+                Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -233,6 +287,7 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JTextField asunto;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

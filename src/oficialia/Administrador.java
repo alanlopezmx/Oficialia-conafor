@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,29 +34,20 @@ public class Administrador extends javax.swing.JFrame {
 
         initComponents();
         getContentPane().setBackground(Color.WHITE);
-        MySqlConn objConn = new MySqlConn();
-        String consulta = "select * from oficio where atendido=0;";
-        objConn.Consult(consulta);
-        int n = 0;
-        if (objConn.rs != null) {
-            try {
-                objConn.rs.last();
-                n = objConn.rs.getRow();
-                objConn.rs.first();
-            } catch (Exception e) {
+        initOficio();
+        new Thread() {
+            public void run() {
+                while (true) {
+                    try {
+                        System.out.println("Hilo Corriendo");
+                        Thread.sleep(3000);
+                        actualizaOficio();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
-        }
-        for (int i = 0; i < n; i++) {
-            try {
-                oficio.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getInt(7));
-                objConn.rs.next();
-            } catch (SQLException ex) {
-                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        oficio.setSelectedIndex(0);
-        objConn.desConnect();
-
+        }.start();
 
     }
 
@@ -121,7 +113,7 @@ public class Administrador extends javax.swing.JFrame {
 
         jButton1.setText("Confirmar");
 
-        jButton2.setText("Oficio");
+        jButton2.setText("Ver Oficio");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -173,40 +165,39 @@ public class Administrador extends javax.swing.JFrame {
                                     .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
                                     .add(jScrollPane2)
                                     .add(oficio, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .add(33, 33, 33)
-                                .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                .add(18, 18, 18)
+                                .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(15, 15, 15)))
                         .add(40, 40, 40))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(oficio, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel4))
                 .add(18, 18, 18)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .add(13, 13, 13)
-                                .add(jLabel1))
-                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 47, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(jLabel2)
-                            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 33, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(27, 27, 27)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel3)
-                            .add(jCheckBox1))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jCheckBox2)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jCheckBox3)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jCheckBox4))
-                    .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 71, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(13, 13, 13)
+                        .add(jLabel1))
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 47, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 38, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(16, 16, 16)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jLabel2)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 33, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(27, 27, 27)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(jCheckBox1))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox2)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox4)
                 .add(26, 26, 26)
                 .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 136, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(41, 41, 41)
@@ -222,6 +213,30 @@ public class Administrador extends javax.swing.JFrame {
         new ImageViewer(img);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void initOficio(){
+        MySqlConn objConn = new MySqlConn();
+        String consulta = "select * from oficio where atendido=0;";
+        objConn.Consult(consulta);
+        int n = 0;
+        if (objConn.rs != null) {
+            try {
+                objConn.rs.last();
+                n = objConn.rs.getRow();
+                objConn.rs.first();
+            } catch (Exception e) {
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            try {
+                oficio.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getInt(7));
+                objConn.rs.next();
+            } catch (SQLException ex) {
+                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        oficio.setSelectedIndex(0);
+        objConn.desConnect();
+    }
     private void oficioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_oficioItemStateChanged
         // TODO add your handling code here:
         if (evt.getStateChange() == ItemEvent.SELECTED) {
@@ -246,6 +261,40 @@ public class Administrador extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_oficioItemStateChanged
+
+    private void actualizaOficio() {
+        MySqlConn objConn = new MySqlConn();
+        int numeroOficios = oficio.getItemCount();
+        String consulta = "select * from oficio where atendido=0;";
+        objConn.Consult(consulta);
+        int n = 0;
+        if (objConn.rs != null) {
+            try {
+                objConn.rs.last();
+                n = objConn.rs.getRow();
+                objConn.rs.first();
+            } catch (Exception e) {
+            }
+        }
+        if (n != numeroOficios) {
+            try {
+                for (int i = 0; i < n; i++) {
+                    if (i >= numeroOficios) {
+                        oficio.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getInt(7));
+                    }
+                    objConn.rs.next();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            JOptionPane.showMessageDialog(null,
+                    "Nuevo Oficio Pendiente.",
+                    "Nuevo Oficio",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        }
+        objConn.desConnect();
+    }
 
     private void oficioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oficioActionPerformed
         // TODO add your handling code here:
