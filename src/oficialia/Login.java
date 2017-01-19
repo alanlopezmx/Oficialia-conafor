@@ -197,7 +197,7 @@ public class Login extends javax.swing.JFrame {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
             if(tipo.equals("ADMINISTRADOR")){
-                new Administrador(email.getText(),new String(password.getPassword()),server.getSelectedItem().toString()).setVisible(true);
+                new Administrador(email.getText(),new String(password.getPassword()),host).setVisible(true);
                 this.dispose();
             }else{
                 new Usuario().setVisible(true);

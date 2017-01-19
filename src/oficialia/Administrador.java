@@ -31,7 +31,9 @@ public class Administrador extends javax.swing.JFrame {
     MySqlConn objConn;
     BufferedImage img[];
     String email, password, host;
-
+    String htmlEmail;
+    String fecha;
+    boolean atender = true;
     public Administrador(String email, String password, String host) {
 
         initComponents();
@@ -41,9 +43,9 @@ public class Administrador extends javax.swing.JFrame {
             public void run() {
                 while (true) {
                     try {
-                        System.out.println("Hilo Corriendo");
                         Thread.sleep(3000);
-                        actualizaOficio();
+                        if(atender)
+                            actualizaOficio();
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -75,16 +77,17 @@ public class Administrador extends javax.swing.JFrame {
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        observaciones = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         oficio = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox5 = new javax.swing.JCheckBox();
         jCheckBox6 = new javax.swing.JCheckBox();
         jCheckBox7 = new javax.swing.JCheckBox();
-        jCheckBox8 = new javax.swing.JCheckBox();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -111,13 +114,17 @@ public class Administrador extends javax.swing.JFrame {
 
         jCheckBox3.setText("Dpto. Jurídico");
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jTextArea3.setText("Observaciones");
-        jTextArea3.setToolTipText("Observaciones");
-        jScrollPane3.setViewportView(jTextArea3);
+        observaciones.setColumns(20);
+        observaciones.setRows(5);
+        observaciones.setToolTipText("Observaciones");
+        jScrollPane3.setViewportView(observaciones);
 
         jButton1.setText("Confirmar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Ver Oficio");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -141,13 +148,15 @@ public class Administrador extends javax.swing.JFrame {
 
         jLabel5.setText("-Subgerencia Operativa.");
 
-        jCheckBox5.setText("Subgerente Operativo");
+        jCheckBox4.setText("Subgerente Operativo");
 
-        jCheckBox6.setText("Dpto. Restauración");
+        jCheckBox5.setText("Dpto. Restauración");
 
-        jCheckBox7.setText("Dpto. Producción");
+        jCheckBox6.setText("Dpto. Producción");
 
-        jCheckBox8.setText("Dpto. Proteccion");
+        jCheckBox7.setText("Dpto. Proteccion");
+
+        jLabel6.setText("Observaciones:");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,10 +173,10 @@ public class Administrador extends javax.swing.JFrame {
                             .add(jCheckBox1)
                             .add(jCheckBox3)
                             .add(jLabel5)
+                            .add(jCheckBox4)
                             .add(jCheckBox5)
                             .add(jCheckBox6)
-                            .add(jCheckBox7)
-                            .add(jCheckBox8))
+                            .add(jCheckBox7))
                         .add(292, 292, 292))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -185,7 +194,8 @@ public class Administrador extends javax.swing.JFrame {
                                         .add(jScrollPane2)
                                         .add(oficio, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .add(18, 18, 18)
-                                    .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                                    .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                            .add(jLabel6))
                         .add(55, 55, 55))))
         );
         layout.setVerticalGroup(
@@ -217,14 +227,16 @@ public class Administrador extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox4)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBox5)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBox6)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBox7)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jCheckBox8)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 43, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 15, Short.MAX_VALUE)
+                .add(jLabel6)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 136, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jButton1)
@@ -252,6 +264,7 @@ public class Administrador extends javax.swing.JFrame {
             } catch (Exception e) {
             }
         }
+        oficio.removeAllItems();
         for (int i = 0; i < n; i++) {
             try {
                 oficio.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getInt(6));
@@ -274,6 +287,7 @@ public class Administrador extends javax.swing.JFrame {
                 objConn.Consult(consulta);
                 asunto.setText(objConn.rs.getString(2));
                 remitente.setText(objConn.rs.getString(3));
+                fecha = objConn.rs.getString(5);
                 consulta = "select imagen from imagen where oficio_oficio_id=" + oficioId + " and oficio_año=" + oficioAño + ";";
                 objConn.Consult(consulta);
                 int n = 0;
@@ -298,7 +312,7 @@ public class Administrador extends javax.swing.JFrame {
                     }
                     objConn.rs.next();
                 }
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -345,6 +359,143 @@ public class Administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_oficioActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (todoCorrecto()) {
+            htmlEmail = "<img src=http://voluntariosblp.com.mx/sites/default/files/CONAFOR.jpg width=400><h2>GERENCIA ESTATAL EN AGUASCALIENTES</h2>"
+                    + "<p><strong>FECHA:</strong> " + fecha +" <strong>TURNO:</strong>" + oficioId + "<br /> <strong>ASUNTO:</strong>" + asunto.getText() + "<br /> <strong>Remitente:</strong>" + remitente.getText() + "<br /> <strong>Area:</strong></p>"
+                    + "<ul>";
+            if (jCheckBox1.isSelected()) {
+                htmlEmail+="<li>Departamento Administrativo.</li>";
+            }
+            if (jCheckBox2.isSelected()) {
+                htmlEmail+="<li>Departamento de Analisis, Seguimiento y Control.</li>";
+            }
+            if (jCheckBox3.isSelected()) {
+                htmlEmail+="<li>Departamento Juridico.</li>";
+            }
+            if (jCheckBox4.isSelected()) {
+                htmlEmail+="<li>Subgerencia Operativa.</li>";
+            }
+            if (jCheckBox5.isSelected()) {
+                htmlEmail+="<li>Departamento de Restauracion.</li>";
+            }
+            if (jCheckBox6.isSelected()) {
+                htmlEmail+="<li>Departamento de Produccion</li>";
+            }
+            if (jCheckBox7.isSelected()) {
+                htmlEmail+="<li>Departamento de Proteccion de Incendios.</li>";
+            }
+            String obs = observaciones.getText();
+            obs = obs.replaceAll("(\r\n|\n)", "<br />");
+            System.out.println(obs);
+            htmlEmail+="</ul>"
+                    + "<p><strong>Observaciones:</strong></p>"
+                    + "<p>" + obs + "</p>";
+            System.out.println(htmlEmail);
+            if (jCheckBox1.isSelected()) {
+                sendMail("ADMINISTRATIVO");
+            }
+            if (jCheckBox2.isSelected()) {
+                sendMail("ANALISIS");
+            }
+            if (jCheckBox3.isSelected()) {
+                sendMail("JURIDICO");
+            }
+            if (jCheckBox4.isSelected()) {
+                sendMail("OPERATIVO");
+            }
+            if (jCheckBox5.isSelected()) {
+                sendMail("RESTAURACION");
+            }
+            if (jCheckBox6.isSelected()) {
+                sendMail("PRODUCCION");
+            }
+            if (jCheckBox7.isSelected()) {
+                sendMail("PROTECCION");
+            }
+            MySqlConn objConn = new MySqlConn();
+            String consulta = "update oficio set atendido=1 where oficio_id=" + oficioId + " and año=" + oficioAño + ";";
+            atender = false;
+            objConn.Update(consulta);
+            oficio.removeItemAt(oficio.getSelectedIndex());
+            initOficio();
+            atender = true;
+            limpiarCampos();
+            JOptionPane.showMessageDialog(null,
+                    "Email enviado exitosamente.",
+                    "Exito",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Faltan campos por rellenar!",
+                    "Error.",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void limpiarCampos(){
+        jCheckBox1.setSelected(false);
+        jCheckBox2.setSelected(false);
+        jCheckBox3.setSelected(false);
+        jCheckBox4.setSelected(false);
+        jCheckBox5.setSelected(false);
+        jCheckBox6.setSelected(false);
+        jCheckBox7.setSelected(false);
+        observaciones.setText("");
+    }
+    
+    private void sendMail(String depto) {
+        String consulta = "select correo,usuario_id from trabajador where departamento='" + depto + "';";
+        String mail = "";
+        String userId = "";
+        MySqlConn objConn = new MySqlConn();
+        objConn.Consult(consulta);
+        if (objConn.rs != null) {
+            try {
+                mail = objConn.rs.getString(1);
+                userId = objConn.rs.getString(2);
+            } catch (SQLException ex) {
+                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Email tmpEmail = new Email(email, password, host);
+            tmpEmail.sendHtmlMail(mail, asunto.getText(), htmlEmail);
+        }
+        consulta = "insert into trabajador_oficio values(" + userId + "," + oficioId + "," + oficioAño + ");";
+        objConn.Update(consulta);
+        objConn.desConnect();
+    }
+
+    private boolean todoCorrecto() {
+        boolean checked = false;
+        if (jCheckBox1.isSelected()) {
+            checked = true;
+        }
+        if (jCheckBox2.isSelected()) {
+            checked = true;
+        }
+        if (jCheckBox3.isSelected()) {
+            checked = true;
+        }
+        if (jCheckBox4.isSelected()) {
+            checked = true;
+        }
+        if (jCheckBox5.isSelected()) {
+            checked = true;
+        }
+        if (jCheckBox6.isSelected()) {
+            checked = true;
+        }
+        if (jCheckBox7.isSelected()) {
+            checked = true;
+        }
+        if (observaciones.getText().trim().isEmpty() || !checked) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -382,19 +533,20 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JCheckBox jCheckBox7;
-    private javax.swing.JCheckBox jCheckBox8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JTextArea observaciones;
     private javax.swing.JComboBox<String> oficio;
     private javax.swing.JTextArea remitente;
     // End of variables declaration//GEN-END:variables
