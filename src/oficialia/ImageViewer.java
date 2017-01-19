@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
 public class ImageViewer extends JFrame implements ActionListener{
  
  private JPanel pOpciones;
- private JButton btnAumentar,btnDisminuir,btnReset;
+ private JButton btnAumentar,btnDisminuir,btnReset,btnAtras,btnSiguiente;
  private File archivo;
  private CuadroImagen img;
  private JScrollPane scroll;
@@ -31,28 +31,39 @@ public class ImageViewer extends JFrame implements ActionListener{
  private int numImg;
   
   
- public ImageViewer(BufferedImage imgTemp){
+ public ImageViewer(BufferedImage... imgTemp){
   super("Visor de imagen");
   setSize(800,800);
   setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   numImg = 0;
   img = new CuadroImagen();
-  img.setImagen(imgTemp);
+  img.setBufferImagen(imgTemp);
+  img.setImagen(0);
   scroll= new JScrollPane(img,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
   this.add(scroll,BorderLayout.CENTER);
   pOpciones = new JPanel();
   btnAumentar = new JButton("+");
   btnDisminuir = new JButton("-");
+  btnAtras = new JButton("<-");
+  btnSiguiente = new JButton("->");
   btnReset = new JButton("Reiniciar");
-  pOpciones.add(btnAumentar);
   pOpciones.add(btnDisminuir);
+   pOpciones.add(btnAumentar);
+  pOpciones.add(btnAtras);
+  pOpciones.add(btnSiguiente);
   pOpciones.add(btnReset);
   this.add(pOpciones,BorderLayout.SOUTH);
   //listeners
   btnAumentar.addActionListener(this);
   btnDisminuir.addActionListener(this);
   btnReset.addActionListener(this);
+  btnAtras.addActionListener(this);
+  btnSiguiente.addActionListener(this);
   setLocationRelativeTo(null);
+  if(imgTemp.length==1){
+      btnAtras.setEnabled(false);
+      btnSiguiente.setEnabled(false);
+  }
   setVisible(true);
  }
   
@@ -62,11 +73,21 @@ public class ImageViewer extends JFrame implements ActionListener{
 
   if(e.getSource()==btnAumentar){
    img.aumentar();
+   btnDisminuir.setEnabled(true);
   }else if(e.getSource()==btnDisminuir){
-   img.disminuir();
+      if(!img.disminuir()){
+          btnDisminuir.setEnabled(false);
+      }else{
+          btnDisminuir.setEnabled(true);
+      }
   }else if(e.getSource()==btnReset){
    img.reset();
+  }else if(e.getSource()==btnAtras){
+   img.prev();
+  }else if(e.getSource()==btnSiguiente){
+   img.next();
   }
+  
  }//funciones getter y setter
  
  public File getArchivo() {

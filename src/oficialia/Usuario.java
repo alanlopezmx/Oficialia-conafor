@@ -28,10 +28,10 @@ public class Usuario extends javax.swing.JFrame {
     /**
      * Creates new form Usuario
      */
+    File files[];
     public Usuario() {
         initComponents();
         getContentPane().setBackground(Color.WHITE);
-        initRemitente();
     }
 
     /**
@@ -44,7 +44,6 @@ public class Usuario extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        remitente = new javax.swing.JComboBox();
         asunto = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -52,6 +51,7 @@ public class Usuario extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         ruta = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
+        remitente = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -94,23 +94,21 @@ public class Usuario extends javax.swing.JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(layout.createSequentialGroup()
-                        .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(ruta))
-                    .add(layout.createSequentialGroup()
+                        .add(32, 32, 32)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel2)
+                            .add(jLabel1))
                         .add(32, 32, 32)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                            .add(layout.createSequentialGroup()
-                                .add(jLabel1)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(remitente, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 226, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(layout.createSequentialGroup()
-                                .add(jLabel2)
-                                .add(53, 53, 53)
-                                .add(asunto, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 229, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
-                .add(18, 18, 18)
+                            .add(asunto, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .add(remitente)))
+                    .add(layout.createSequentialGroup()
+                        .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(18, 18, 18)
+                        .add(ruta)))
+                .add(26, 26, 26)
                 .add(jButton3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(4, 4, 4)
                 .add(jLabel3)
                 .addContainerGap())
         );
@@ -144,22 +142,40 @@ public class Usuario extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if(noVacio()){
-            File file = new File(ruta.getText());
             FileInputStream fis = null;
             MySqlConn objConn = new MySqlConn();
-            String consulta = "insert into oficio(asunto,remitente,contenido,atendido,oficio_id) values(?,?,?,?,?);";
+            String consulta = "insert into oficio(asunto,remitente,atendido,oficio_id) values(?,?,?,?);";
             PreparedStatement statement;
             try {
-                fis = new FileInputStream(file);
                 statement = objConn.prepareStatement(consulta);
                 statement.setString(1,asunto.getText());
-                String remit[] = remitente.getSelectedItem().toString().split("-");
-                statement.setString(2,remit[1] + "-" + remit[2]);
+                statement.setString(2,remitente.getText());
+                statement.setInt(3,0);
                 statement.setInt(4,0);
-                statement.setInt(5,0);
-                statement.setBinaryStream(3, fis,(int)file.length());
                 statement.executeUpdate();
+                consulta = "select seq_val,seq_year from _sequence where seq_name='seq_oficio';";
+                objConn.Consult(consulta);
+                String lastId = objConn.rs.getString(1);
+                int year = objConn.rs.getInt(2);
+                consulta = "insert into imagen(imagen,oficio_oficio_id,oficio_año) values(?,?,?);";
+                for (int i = 0; i < files.length; i++) {
+                    statement = objConn.prepareStatement(consulta);
+                    fis = new FileInputStream(files[i]);
+                    statement.setBinaryStream(1, fis,(int)files[i].length());
+                    statement.setString(2, lastId);
+                    statement.setInt(3, year);
+                    statement.executeUpdate();
+                }
+                limpiarCampos();
+                JOptionPane.showMessageDialog(null,
+                    "Oficio enviado de manera exitosa!",
+                    "Correcto",
+                    JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null,
+                    "Ocurrio un error al enviar el oficio.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
             }finally{
                 try {
@@ -171,7 +187,7 @@ public class Usuario extends javax.swing.JFrame {
                 }
                 
             }
-            limpiarCampos();
+            
         }else{
             JOptionPane.showMessageDialog(null,
                     "Faltan campos por rellenar!",
@@ -180,34 +196,11 @@ public class Usuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void initRemitente(){
-        MySqlConn objConn = new MySqlConn();
-        String consulta = "select * from trabajador;";
-        objConn.Consult(consulta);
-        int n = 0;
-        if (objConn.rs != null) {
-            try {
-                objConn.rs.last();
-                n = objConn.rs.getRow();
-                objConn.rs.first();
-            } catch (Exception e) {
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            try {
-                remitente.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getString(2) + " " + objConn.rs.getString(3) + "-" + objConn.rs.getString(7));
-                objConn.rs.next();
-            } catch (SQLException ex) {
-                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        remitente.setSelectedIndex(0);
-        objConn.desConnect();
-    }
     
     private void limpiarCampos(){
         asunto.setText("");
         ruta.setText("");
+        remitente.setText("");
     }
     
     private boolean noVacio(){
@@ -219,14 +212,14 @@ public class Usuario extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         JFileChooser chooser = new JFileChooser();
-        chooser.setMultiSelectionEnabled(false);
+        chooser.setMultiSelectionEnabled(true);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
         "Imagenes", "jpg", "gif","png","bmp");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(null);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
-            ruta.setText(chooser.getSelectedFile().getAbsolutePath());
-           System.out.println("You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
+            ruta.setText(chooser.getSelectedFiles()[0].getAbsolutePath());
+            files = chooser.getSelectedFiles();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -239,9 +232,11 @@ public class Usuario extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }else{
             try {
-                File file = new File(ruta.getText());
-                BufferedImage img = ImageIO.read(file);
-                new ImageViewer(img);
+                BufferedImage imagenes[] = new BufferedImage[files.length];
+                for (int i = 0; i < imagenes.length; i++) {
+                    imagenes[i] = ImageIO.read(files[i]);
+                }
+                new ImageViewer(imagenes);
             } catch (IOException ex) {
                 Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -291,7 +286,7 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JComboBox remitente;
+    private javax.swing.JTextField remitente;
     private javax.swing.JTextField ruta;
     // End of variables declaration//GEN-END:variables
 }

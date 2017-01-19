@@ -25,29 +25,42 @@ public class CuadroImagen extends JPanel implements Printable {
 
     private float zoom;
     private int ancho, alto;
-    private BufferedImage bufferImagen;
+    private BufferedImage[] bufferImagen;
     private Image imagen, imagenAux;
     private boolean hayFoto = false;
-
+    private int selected;
     public CuadroImagen() {
         this.zoom = 0;
         this.setBounds(0, 0, 500, 500);
         this.setVisible(true);
-
+    }
+    public void setBufferImagen(BufferedImage... bufferImagen){
+        this.bufferImagen = bufferImagen;
     }
 
     //metodo que coloca la imagen que va ser dibujada 
-    public void setImagen(BufferedImage tempImg) {
-        this.zoom = 0;
-        this.bufferImagen = tempImg;
-        imagen = bufferImagen;
+    public void setImagen(float zoom) {
+        this.zoom = zoom;
+        this.imagen = bufferImagen[selected];
         imagenAux = imagen;
         hayFoto = true;
         ancho = imagen.getWidth(this);
         alto = imagen.getHeight(this);
         this.resize();
         repaint();
+        pintar();
 
+    }
+    public void pintar(){
+        ancho = (int) (imagen.getWidth(this) * (zoom + 1));
+        alto = (int) (imagen.getHeight(this) * (zoom + 1));
+        if(ancho<=0 || alto<=0){
+            ancho = imagen.getWidth(this);
+            alto = imagen.getHeight(this);
+        }
+        imagenAux = imagen.getScaledInstance(ancho, alto, Image.SCALE_FAST);
+        resize();
+        repaint();
     }
 
     //metodo paint que dibuja la imagen en el JPanel
@@ -69,22 +82,41 @@ public class CuadroImagen extends JPanel implements Printable {
     //metodos del zoom
     public void aumentar() {
         this.zoom = (float) (this.zoom + 0.10);
-
-        ancho = (int) (imagen.getWidth(this) * (zoom + 1));
-        alto = (int) (imagen.getHeight(this) * (zoom + 1));
-        imagenAux = imagen.getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING);
-        resize();
-        repaint();
+        pintar();
     }
 
-    public void disminuir() {
+    public boolean disminuir() {
         this.zoom = (float) (this.zoom - 0.10);
         ancho = (int) (imagen.getWidth(this) * (zoom + 1));
         alto = (int) (imagen.getHeight(this) * (zoom + 1));
-        imagenAux = imagen.getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING);
-        resize();
-        repaint();
+        if(alto>0 && ancho >0){
+            imagenAux = imagen.getScaledInstance(ancho, alto, Image.SCALE_FAST);
+            resize();
+            repaint();
+        }else{
+            return false;
+        }
+        return true;
     }
+    
+    public void next(){
+        if(selected + 1 >= bufferImagen.length){
+            selected = 0;
+        } else{
+            selected++;
+        }
+        setImagen(this.zoom);
+    }
+    
+    public void prev(){
+        if(selected - 1 <0){
+            selected = bufferImagen.length-1;
+        } else{
+            selected--;
+        }
+        setImagen(this.zoom);
+    }
+    
 
     public void reset() {
         this.zoom = 0;

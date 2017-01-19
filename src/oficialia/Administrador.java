@@ -27,10 +27,12 @@ public class Administrador extends javax.swing.JFrame {
      * Creates new form Administrador
      */
     String oficioId;
+    String oficioAño;
     MySqlConn objConn;
-    BufferedImage img;
+    BufferedImage img[];
+    String email, password, host;
 
-    public Administrador() {
+    public Administrador(String email, String password, String host) {
 
         initComponents();
         getContentPane().setBackground(Color.WHITE);
@@ -48,7 +50,9 @@ public class Administrador extends javax.swing.JFrame {
                 }
             }
         }.start();
-
+        this.email = email;
+        this.password = password;
+        this.host = host;
     }
 
     /**
@@ -70,13 +74,17 @@ public class Administrador extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea3 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         oficio = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jCheckBox5 = new javax.swing.JCheckBox();
+        jCheckBox6 = new javax.swing.JCheckBox();
+        jCheckBox7 = new javax.swing.JCheckBox();
+        jCheckBox8 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -102,8 +110,6 @@ public class Administrador extends javax.swing.JFrame {
         jCheckBox2.setText("Dpto. de Análisis, Seguimiento y Control.");
 
         jCheckBox3.setText("Dpto. Jurídico");
-
-        jCheckBox4.setText("Subgerencia Operativa.");
 
         jTextArea3.setColumns(20);
         jTextArea3.setRows(5);
@@ -133,47 +139,59 @@ public class Administrador extends javax.swing.JFrame {
 
         jLabel4.setText("Oficio:");
 
+        jLabel5.setText("-Subgerencia Operativa.");
+
+        jCheckBox5.setText("Subgerente Operativo");
+
+        jCheckBox6.setText("Dpto. Restauración");
+
+        jCheckBox7.setText("Dpto. Producción");
+
+        jCheckBox8.setText("Dpto. Proteccion");
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap(152, Short.MAX_VALUE)
+                .addContainerGap(137, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(jButton1)
-                        .add(447, 447, 447))
+                        .add(jLabel3)
+                        .add(53, 53, 53)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jCheckBox2)
+                            .add(jCheckBox1)
+                            .add(jCheckBox3)
+                            .add(jLabel5)
+                            .add(jCheckBox5)
+                            .add(jCheckBox6)
+                            .add(jCheckBox7)
+                            .add(jCheckBox8))
+                        .add(292, 292, 292))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 107, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                                 .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 633, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(layout.createSequentialGroup()
-                                    .add(jLabel3)
-                                    .add(53, 53, 53)
                                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(jCheckBox2)
-                                        .add(jCheckBox1)
-                                        .add(jCheckBox3)
-                                        .add(jCheckBox4))))
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jLabel2)
-                                    .add(jLabel1)
-                                    .add(jLabel4))
-                                .add(18, 18, 18)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                                    .add(jScrollPane2)
-                                    .add(oficio, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .add(18, 18, 18)
-                                .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(15, 15, 15)))
-                        .add(40, 40, 40))))
+                                        .add(jLabel2)
+                                        .add(jLabel1)
+                                        .add(jLabel4))
+                                    .add(18, 18, 18)
+                                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                                        .add(jScrollPane2)
+                                        .add(oficio, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .add(18, 18, 18)
+                                    .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                        .add(55, 55, 55))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(oficio, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel4))
@@ -197,12 +215,20 @@ public class Administrador extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBox3)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jCheckBox4)
-                .add(26, 26, 26)
+                .add(jLabel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox5)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox6)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox7)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox8)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 43, Short.MAX_VALUE)
                 .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 136, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(41, 41, 41)
+                .add(18, 18, 18)
                 .add(jButton1)
-                .addContainerGap())
+                .add(23, 23, 23))
         );
 
         pack();
@@ -213,7 +239,7 @@ public class Administrador extends javax.swing.JFrame {
         new ImageViewer(img);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void initOficio(){
+    private void initOficio() {
         MySqlConn objConn = new MySqlConn();
         String consulta = "select * from oficio where atendido=0;";
         objConn.Consult(consulta);
@@ -228,7 +254,7 @@ public class Administrador extends javax.swing.JFrame {
         }
         for (int i = 0; i < n; i++) {
             try {
-                oficio.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getInt(7));
+                oficio.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getInt(6));
                 objConn.rs.next();
             } catch (SQLException ex) {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
@@ -242,18 +268,37 @@ public class Administrador extends javax.swing.JFrame {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             try {
                 oficioId = oficio.getSelectedItem().toString().split("-")[0];
+                oficioAño = oficio.getSelectedItem().toString().split("-")[1];
                 objConn = new MySqlConn();
                 String consulta = "select * from oficio where oficio_id=" + oficioId + ";";
                 objConn.Consult(consulta);
                 asunto.setText(objConn.rs.getString(2));
                 remitente.setText(objConn.rs.getString(3));
-                Blob blob = objConn.rs.getBlob(4);
-                byte[] data = blob.getBytes(1, (int) blob.length());
-                try {
-                    img = ImageIO.read(new ByteArrayInputStream(data));
-                } catch (IOException ex) {
-                    Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+                consulta = "select imagen from imagen where oficio_oficio_id=" + oficioId + " and oficio_año=" + oficioAño + ";";
+                objConn.Consult(consulta);
+                int n = 0;
+                if (objConn.rs != null) {
+                    try {
+                        objConn.rs.last();
+                        n = objConn.rs.getRow();
+                        objConn.rs.first();
+                    } catch (Exception e) {
+                    }
                 }
+                img = new BufferedImage[n];
+                System.out.println("id-" + oficioId + " " + oficioAño + " " + n);
+                for (int i = 0; i < n; i++) {
+                    System.out.println("entro");
+                    Blob blob = objConn.rs.getBlob(1);
+                    byte[] data = blob.getBytes(1, (int) blob.length());
+                    try {
+                        img[i] = ImageIO.read(new ByteArrayInputStream(data));
+                    } catch (IOException ex) {
+                        Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    objConn.rs.next();
+                }
+                
             } catch (SQLException ex) {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -280,7 +325,7 @@ public class Administrador extends javax.swing.JFrame {
             try {
                 for (int i = 0; i < n; i++) {
                     if (i >= numeroOficios) {
-                        oficio.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getInt(7));
+                        oficio.addItem(objConn.rs.getString(1) + "-" + objConn.rs.getInt(6));
                     }
                     objConn.rs.next();
                 }
@@ -328,11 +373,6 @@ public class Administrador extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Administrador().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -342,11 +382,15 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JCheckBox jCheckBox7;
+    private javax.swing.JCheckBox jCheckBox8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

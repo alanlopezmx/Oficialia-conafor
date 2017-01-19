@@ -38,7 +38,11 @@ public class Email {
         this.host = host;
         this.port = port;
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        if(host.equals(Host.CONAFOR)){
+            props.put("mail.smtp.starttls.enable", "false");
+        }else{
+            props.put("mail.smtp.starttls.enable", "true");
+        }
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", port);
         this.login = login();
@@ -50,6 +54,7 @@ public class Email {
         this(email,password,"smtp.gmail.com",587);
     }
     private boolean login(){
+        System.out.println(host);
         session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(email,password);

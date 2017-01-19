@@ -10,6 +10,7 @@ package oficialia;
  * @author Héctor Alan López Díaz <alanlopez1995@hotmail.com>
  */
 public interface Host {
-    public String HOTMAIL = "smtp.live.com";
-    public String GMAIL = "smtp.gmail.com";
+    static final public String HOTMAIL = "smtp.live.com";
+    static final public String GMAIL = "smtp.gmail.com";
+    static final public String CONAFOR = "mail.conafor.gob.mx";
 }

@@ -176,6 +176,8 @@ public class Login extends javax.swing.JFrame {
         }
         switch (selection) {
             case 0:
+                host = Host.CONAFOR;
+                break;
             case 1:
                 host = Host.GMAIL;
                 break;
@@ -195,7 +197,7 @@ public class Login extends javax.swing.JFrame {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
             if(tipo.equals("ADMINISTRADOR")){
-                new Administrador().setVisible(true);
+                new Administrador(email.getText(),new String(password.getPassword()),server.getSelectedItem().toString()).setVisible(true);
                 this.dispose();
             }else{
                 new Usuario().setVisible(true);
