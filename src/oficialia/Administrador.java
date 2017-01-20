@@ -466,12 +466,18 @@ public class Administrador extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
 
+        } else if (oficio.getItemCount() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "No tiene oficios pendiendes!",
+                    "Error.",
+                    JOptionPane.ERROR_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this,
                     "Faltan campos por rellenar!",
                     "Error.",
                     JOptionPane.ERROR_MESSAGE);
         }
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -547,6 +553,9 @@ public class Administrador extends javax.swing.JFrame {
             checked = true;
         }
         if (observaciones.getText().trim().isEmpty() || !checked) {
+            return false;
+        }
+        if(oficio.getItemCount() == 0){
             return false;
         }
         return true;
