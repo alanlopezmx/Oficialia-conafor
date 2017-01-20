@@ -5,6 +5,7 @@
  */
 package oficialia;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import javax.swing.ImageIcon;
@@ -15,23 +16,19 @@ import javax.swing.JLabel;
  *
  * @author alan
  */
-public class WaitDialog extends Thread{
+public class WaitDialog extends JDialog{
     Frame frame;
-    public JDialog dialog;
     public WaitDialog(Frame frame){
-        super();
+        super(frame,true);
         this.frame= frame;
-    }
-    public void run(){
-        dialog = new JDialog();
+        this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         JLabel gif = new JLabel();
         gif.setIcon(new ImageIcon(getClass().getResource("/resources/loading.gif")));
-        dialog.setLayout(new FlowLayout());
-        dialog.add(new JLabel("Porfavor espere..."));
-        dialog.add(gif);
-        dialog.pack();
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        this.setLayout(new FlowLayout());
+        this.add(new JLabel("Porfavor espere..."));
+        this.add(gif);
+        this.pack();
+        this.setLocationRelativeTo(null);
     }
             
 }

@@ -32,6 +32,7 @@ public class Usuario extends javax.swing.JFrame {
     public Usuario() {
         initComponents();
         getContentPane().setBackground(Color.WHITE);
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -167,12 +168,12 @@ public class Usuario extends javax.swing.JFrame {
                     statement.executeUpdate();
                 }
                 limpiarCampos();
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(this,
                     "Oficio enviado de manera exitosa!",
                     "Correcto",
                     JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(this,
                     "Ocurrio un error al enviar el oficio.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -189,7 +190,7 @@ public class Usuario extends javax.swing.JFrame {
             }
             
         }else{
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     "Faltan campos por rellenar!",
                     "Error.",
                     JOptionPane.ERROR_MESSAGE);
@@ -226,7 +227,7 @@ public class Usuario extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         if(ruta.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     "Primero Carga una imagen!",
                     "Error.",
                     JOptionPane.ERROR_MESSAGE);

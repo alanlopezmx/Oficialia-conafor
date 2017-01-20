@@ -111,7 +111,7 @@ public class Email {
         }
     }
 
-    public void sendHtmlMail(String to[], String subject, String mail, BufferedImage[] img) {
+    public boolean sendHtmlMail(String to[], String subject, String mail, BufferedImage[] img) {
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -153,9 +153,11 @@ public class Email {
             message.setContent(multiParte);
             Transport.send(message);
             System.out.println("Tu mensaje ha sido enviado");
+            return true;
+
 
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 

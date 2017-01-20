@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -29,9 +30,9 @@ public class Login extends javax.swing.JFrame {
      */
     String sEmail;
     String sPassword;
-
     public Login() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -91,8 +92,8 @@ public class Login extends javax.swing.JFrame {
                 .add(55, 55, 55)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(emailLabel)
-                    .add(emailLabel1)
-                    .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 80, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 80, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(emailLabel1))
                 .add(33, 33, 33)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(server, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 160, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -174,7 +175,7 @@ public class Login extends javax.swing.JFrame {
             }
         }
         if(n==0){ // usuario no registrado en la base de datos
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     "No se encontro la informacion en la base de datos, consulta al administrador.",
                     "Usuario no registrado!",
                     JOptionPane.ERROR_MESSAGE);
@@ -191,12 +192,22 @@ public class Login extends javax.swing.JFrame {
             case 2:
                 host = Host.HOTMAIL;
         }
-        //WaitDialog dialog = new WaitDialog(this);
-        //dialog.start();
-        System.out.println("jeje");
-        Email tempLogin = new Email(email.getText(), new String(password.getPassword()), host);
-        if (!tempLogin.login) {
-            JOptionPane.showMessageDialog(null,
+        boolean login = false;
+        Worker worker = new Worker(email.getText(), new String(password.getPassword()), host,Worker.LOGIN);
+        WaitDialog dialog = new WaitDialog(this);
+        worker.setDialog(dialog);
+        worker.execute();
+        dialog.setVisible(true);
+        try {
+            login = worker.get();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Email tempLogin = new Email(email.getText(), new String(password.getPassword()), host);
+        if (!login) {
+            JOptionPane.showMessageDialog(this,
                     "Error al iniciar sesion, email o contraseña incorrectos!.",
                     "Error!",
                     JOptionPane.ERROR_MESSAGE);

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -59,6 +60,7 @@ public class Administrador extends javax.swing.JFrame {
         this.email = email;
         this.password = password;
         this.host = host;
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -277,8 +279,9 @@ public class Administrador extends javax.swing.JFrame {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if(oficio.getItemCount()>0)
+        if (oficio.getItemCount() > 0) {
             oficio.setSelectedIndex(0);
+        }
         objConn.desConnect();
     }
     private void oficioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_oficioItemStateChanged
@@ -351,7 +354,7 @@ public class Administrador extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
             }
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     "Nuevo Oficio Pendiente.",
                     "Nuevo Oficio",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -426,21 +429,45 @@ public class Administrador extends javax.swing.JFrame {
             if (jCheckBox7.isSelected()) {
                 insertTrabajador_oficio("PROTECCION");
             }
-            sendMail();
-            MySqlConn objConn = new MySqlConn();
-            String consulta = "update oficio set atendido=1 where oficio_id=" + oficioId + " and año=" + oficioAño + ";";
-            atender = false;
-            objConn.Update(consulta);
-            oficio.removeItemAt(oficio.getSelectedIndex());
-            initOficio();
-            atender = true;
-            limpiarCampos();
-            JOptionPane.showMessageDialog(null,
-                    "Email enviado exitosamente.",
-                    "Exito",
-                    JOptionPane.INFORMATION_MESSAGE);
+            boolean enviado = false;
+            Worker worker = new Worker(email, password, host, Worker.SEND_EMAIL);
+            worker.setAsunto(asunto.getText());
+            WaitDialog dialog = new WaitDialog(this);
+            worker.setDialog(dialog);
+            worker.setHtmlEmail(htmlEmail);
+            worker.setMails(mails);
+            worker.setImg(img);
+            worker.execute();
+            dialog.setVisible(true);
+            try {
+                enviado = worker.get();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExecutionException ex) {
+                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (enviado) {
+                MySqlConn objConn = new MySqlConn();
+                String consulta = "update oficio set atendido=1 where oficio_id=" + oficioId + " and año=" + oficioAño + ";";
+                atender = false;
+                objConn.Update(consulta);
+                oficio.removeItemAt(oficio.getSelectedIndex());
+                initOficio();
+                atender = true;
+                limpiarCampos();
+                JOptionPane.showMessageDialog(this,
+                        "Email enviado exitosamente.",
+                        "Exito",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Ocurrio un error al enviar el email, revise su conexion a internet",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
         } else {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     "Faltan campos por rellenar!",
                     "Error.",
                     JOptionPane.ERROR_MESSAGE);
@@ -457,6 +484,8 @@ public class Administrador extends javax.swing.JFrame {
         jCheckBox6.setSelected(false);
         jCheckBox7.setSelected(false);
         observaciones.setText("");
+        asunto.setText("");
+        remitente.setText("");
     }
 
     private String getMail(String depto) {
@@ -492,13 +521,6 @@ public class Administrador extends javax.swing.JFrame {
         consulta = "insert into trabajador_oficio values(" + userId + "," + oficioId + "," + oficioAño + ");";
         objConn.Update(consulta);
         objConn.desConnect();
-    }
-
-    private void sendMail() {
-        Email tmpEmail = new Email(email, password, host);
-        String[] mailArray = new String[mails.size()];
-        mailArray = mails.toArray(mailArray);
-        tmpEmail.sendHtmlMail(mailArray, asunto.getText(), htmlEmail,img);
     }
 
     private boolean todoCorrecto() {
