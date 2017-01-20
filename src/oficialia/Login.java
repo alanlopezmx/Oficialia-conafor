@@ -5,10 +5,17 @@
  */
 package oficialia;
 
+import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -184,6 +191,9 @@ public class Login extends javax.swing.JFrame {
             case 2:
                 host = Host.HOTMAIL;
         }
+        //WaitDialog dialog = new WaitDialog(this);
+        //dialog.start();
+        System.out.println("jeje");
         Email tempLogin = new Email(email.getText(), new String(password.getPassword()), host);
         if (!tempLogin.login) {
             JOptionPane.showMessageDialog(null,

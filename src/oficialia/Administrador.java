@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -33,7 +34,9 @@ public class Administrador extends javax.swing.JFrame {
     String email, password, host;
     String htmlEmail;
     String fecha;
+    ArrayList<String> mails;
     boolean atender = true;
+
     public Administrador(String email, String password, String host) {
 
         initComponents();
@@ -44,8 +47,9 @@ public class Administrador extends javax.swing.JFrame {
                 while (true) {
                     try {
                         Thread.sleep(3000);
-                        if(atender)
+                        if (atender) {
                             actualizaOficio();
+                        }
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -273,7 +277,8 @@ public class Administrador extends javax.swing.JFrame {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        oficio.setSelectedIndex(0);
+        if(oficio.getItemCount()>0)
+            oficio.setSelectedIndex(0);
         objConn.desConnect();
     }
     private void oficioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_oficioItemStateChanged
@@ -362,58 +367,66 @@ public class Administrador extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if (todoCorrecto()) {
+            mails = new ArrayList();
             htmlEmail = "<img src=http://voluntariosblp.com.mx/sites/default/files/CONAFOR.jpg width=400><h2>GERENCIA ESTATAL EN AGUASCALIENTES</h2>"
-                    + "<p><strong>FECHA:</strong> " + fecha +" <strong>TURNO:</strong>" + oficioId + "<br /> <strong>ASUNTO:</strong>" + asunto.getText() + "<br /> <strong>Remitente:</strong>" + remitente.getText() + "<br /> <strong>Area:</strong></p>"
+                    + "<p><strong>FECHA:</strong> " + fecha + " <strong>TURNO:</strong>" + oficioId + "<br /> <strong>ASUNTO:</strong>" + asunto.getText() + "<br /> <strong>Remitente:</strong>" + remitente.getText() + "<br /> <strong>Area:</strong></p>"
                     + "<ul>";
             if (jCheckBox1.isSelected()) {
-                htmlEmail+="<li>Departamento Administrativo.</li>";
+                mails.add(getMail("ADMINISTRATIVO"));
+                htmlEmail += "<li>Departamento Administrativo.</li>";
             }
             if (jCheckBox2.isSelected()) {
-                htmlEmail+="<li>Departamento de Analisis, Seguimiento y Control.</li>";
+                mails.add(getMail("ANALISIS"));
+                htmlEmail += "<li>Departamento de Analisis, Seguimiento y Control.</li>";
             }
             if (jCheckBox3.isSelected()) {
-                htmlEmail+="<li>Departamento Juridico.</li>";
+                mails.add(getMail("JURIDICO"));
+                htmlEmail += "<li>Departamento Juridico.</li>";
             }
             if (jCheckBox4.isSelected()) {
-                htmlEmail+="<li>Subgerencia Operativa.</li>";
+                mails.add(getMail("OPERATIVO"));
+                htmlEmail += "<li>Subgerencia Operativa.</li>";
             }
             if (jCheckBox5.isSelected()) {
-                htmlEmail+="<li>Departamento de Restauracion.</li>";
+                mails.add(getMail("RESTAURACION"));
+                htmlEmail += "<li>Departamento de Restauracion.</li>";
             }
             if (jCheckBox6.isSelected()) {
-                htmlEmail+="<li>Departamento de Produccion</li>";
+                mails.add(getMail("PRODUCCION"));
+                htmlEmail += "<li>Departamento de Produccion</li>";
             }
             if (jCheckBox7.isSelected()) {
-                htmlEmail+="<li>Departamento de Proteccion de Incendios.</li>";
+                mails.add(getMail("PROTECCION"));
+                htmlEmail += "<li>Departamento de Proteccion de Incendios.</li>";
             }
             String obs = observaciones.getText();
             obs = obs.replaceAll("(\r\n|\n)", "<br />");
-            System.out.println(obs);
-            htmlEmail+="</ul>"
+            htmlEmail += "</ul>"
                     + "<p><strong>Observaciones:</strong></p>"
                     + "<p>" + obs + "</p>";
             System.out.println(htmlEmail);
             if (jCheckBox1.isSelected()) {
-                sendMail("ADMINISTRATIVO");
+                insertTrabajador_oficio("ADMINISTRATIVO");
             }
             if (jCheckBox2.isSelected()) {
-                sendMail("ANALISIS");
+                insertTrabajador_oficio("ANALISIS");
             }
             if (jCheckBox3.isSelected()) {
-                sendMail("JURIDICO");
+                insertTrabajador_oficio("JURIDICO");
             }
             if (jCheckBox4.isSelected()) {
-                sendMail("OPERATIVO");
+                insertTrabajador_oficio("OPERATIVO");
             }
             if (jCheckBox5.isSelected()) {
-                sendMail("RESTAURACION");
+                insertTrabajador_oficio("RESTAURACION");
             }
             if (jCheckBox6.isSelected()) {
-                sendMail("PRODUCCION");
+                insertTrabajador_oficio("PRODUCCION");
             }
             if (jCheckBox7.isSelected()) {
-                sendMail("PROTECCION");
+                insertTrabajador_oficio("PROTECCION");
             }
+            sendMail();
             MySqlConn objConn = new MySqlConn();
             String consulta = "update oficio set atendido=1 where oficio_id=" + oficioId + " and año=" + oficioAño + ";";
             atender = false;
@@ -435,7 +448,7 @@ public class Administrador extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void limpiarCampos(){
+    private void limpiarCampos() {
         jCheckBox1.setSelected(false);
         jCheckBox2.setSelected(false);
         jCheckBox3.setSelected(false);
@@ -445,8 +458,24 @@ public class Administrador extends javax.swing.JFrame {
         jCheckBox7.setSelected(false);
         observaciones.setText("");
     }
-    
-    private void sendMail(String depto) {
+
+    private String getMail(String depto) {
+        String consulta = "select correo,usuario_id from trabajador where departamento='" + depto + "';";
+        String mail = "";
+        MySqlConn objConn = new MySqlConn();
+        objConn.Consult(consulta);
+        if (objConn.rs != null) {
+            try {
+                mail = objConn.rs.getString(1);
+            } catch (SQLException ex) {
+                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        objConn.desConnect();
+        return mail;
+    }
+
+    private void insertTrabajador_oficio(String depto) {
         String consulta = "select correo,usuario_id from trabajador where departamento='" + depto + "';";
         String mail = "";
         String userId = "";
@@ -459,12 +488,17 @@ public class Administrador extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Email tmpEmail = new Email(email, password, host);
-            tmpEmail.sendHtmlMail(mail, asunto.getText(), htmlEmail);
         }
         consulta = "insert into trabajador_oficio values(" + userId + "," + oficioId + "," + oficioAño + ");";
         objConn.Update(consulta);
         objConn.desConnect();
+    }
+
+    private void sendMail() {
+        Email tmpEmail = new Email(email, password, host);
+        String[] mailArray = new String[mails.size()];
+        mailArray = mails.toArray(mailArray);
+        tmpEmail.sendHtmlMail(mailArray, asunto.getText(), htmlEmail,img);
     }
 
     private boolean todoCorrecto() {
