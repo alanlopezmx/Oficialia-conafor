@@ -64,7 +64,6 @@ public class Login extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         emailLabel1 = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
-        server = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -95,8 +94,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        server.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Conafor", "Gmail", "Hotmail" }));
-
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -108,11 +105,9 @@ public class Login extends javax.swing.JFrame {
                     .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 80, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(emailLabel1))
                 .add(33, 33, 33)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(server, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 160, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                        .add(password)
-                        .add(email, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 268, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                    .add(password)
+                    .add(email, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 268, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 95, Short.MAX_VALUE)
                 .add(logo)
                 .add(58, 58, 58))
@@ -132,9 +127,7 @@ public class Login extends javax.swing.JFrame {
                             .add(emailLabel1)
                             .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .add(18, 18, 18)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(server, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jButton1))))
+                        .add(jButton1)))
                 .addContainerGap(143, Short.MAX_VALUE))
         );
 
@@ -172,7 +165,6 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordKeyReleased
 
     private boolean login() {
-        int selection = server.getSelectedIndex();
         String host = "";
         String consulta = "select tipo from usuario where usuario_id='" + email.getText() + "';";
         String tipo = "";
@@ -195,16 +187,7 @@ public class Login extends javax.swing.JFrame {
             objConn.desConnect();
             return false;
         }
-        switch (selection) {
-            case 0:
-                host = Host.CONAFOR;
-                break;
-            case 1:
-                host = Host.GMAIL;
-                break;
-            case 2:
-                host = Host.HOTMAIL;
-        }
+        host = Host.CONAFOR;
         boolean login = false;
         Worker worker = new Worker(email.getText(), new String(password.getPassword()), host,Worker.LOGIN);
         WaitDialog dialog = new WaitDialog(this);
@@ -285,6 +268,5 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel logo;
     private javax.swing.JPasswordField password;
-    private javax.swing.JComboBox<String> server;
     // End of variables declaration//GEN-END:variables
 }

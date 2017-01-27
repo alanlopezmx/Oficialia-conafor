@@ -158,7 +158,7 @@ public class Usuario extends javax.swing.JFrame {
                 objConn.Consult(consulta);
                 String lastId = objConn.rs.getString(1);
                 int year = objConn.rs.getInt(2);
-                consulta = "insert into imagen(imagen,oficio_oficio_id,oficio_año) values(?,?,?);";
+                consulta = "insert into imagen(imagen,oficio_oficio_id,oficio_anio) values(?,?,?);";
                 for (int i = 0; i < files.length; i++) {
                     statement = objConn.prepareStatement(consulta);
                     fis = new FileInputStream(files[i]);

@@ -254,7 +254,15 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        new ImageViewer(img);
+        if (oficio.getItemCount() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "No tiene oficios pendiendes!",
+                    "Error.",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            new ImageViewer(img);
+        }
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void initOficio() {
@@ -296,7 +304,7 @@ public class Administrador extends javax.swing.JFrame {
                 asunto.setText(objConn.rs.getString(2));
                 remitente.setText(objConn.rs.getString(3));
                 fecha = objConn.rs.getString(5);
-                consulta = "select imagen from imagen where oficio_oficio_id=" + oficioId + " and oficio_año=" + oficioAño + ";";
+                consulta = "select imagen from imagen where oficio_oficio_id=" + oficioId + " and oficio_anio=" + oficioAño + ";";
                 objConn.Consult(consulta);
                 int n = 0;
                 if (objConn.rs != null) {
@@ -448,7 +456,7 @@ public class Administrador extends javax.swing.JFrame {
             }
             if (enviado) {
                 MySqlConn objConn = new MySqlConn();
-                String consulta = "update oficio set atendido=1 where oficio_id=" + oficioId + " and año=" + oficioAño + ";";
+                String consulta = "update oficio set atendido=1 where oficio_id=" + oficioId + " and anio=" + oficioAño + ";";
                 atender = false;
                 objConn.Update(consulta);
                 oficio.removeItemAt(oficio.getSelectedIndex());
@@ -555,7 +563,7 @@ public class Administrador extends javax.swing.JFrame {
         if (observaciones.getText().trim().isEmpty() || !checked) {
             return false;
         }
-        if(oficio.getItemCount() == 0){
+        if (oficio.getItemCount() == 0) {
             return false;
         }
         return true;

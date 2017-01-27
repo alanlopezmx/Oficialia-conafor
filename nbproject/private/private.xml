@@ -5,12 +5,11 @@
         <group>
             <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/Login.java</file>
             <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/Usuario.java</file>
-            <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/ImageViewer.java</file>
+            <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/MySqlConn.java</file>
+            <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/Worker.java</file>
             <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/Administrador.java</file>
-            <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/Host.java</file>
-            <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/Email.java</file>
             <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/WaitDialog.java</file>
-            <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/CuadroImagen.java</file>
+            <file>file:/home/alan/NetBeansProjects/Oficialia-conafor/src/oficialia/Email.java</file>
         </group>
     </open-files>
 </project-private>
