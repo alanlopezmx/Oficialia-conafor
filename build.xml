@@ -72,9 +72,9 @@
     -->
     <target name="-post-jar">
         <jar update="true" destfile="${dist.jar}">
-            <zipfileset src="dist/lib/mail.jar" excludes="META-INF/*" />
-            <zipfileset src="dist/lib/mysql-connector-java-5.1.35-bin.jar" excludes="META-INF/*" />
-            <zipfileset src="dist/lib/swing-layout-1.0.4.jar" excludes="META-INF/*" />
+            <zipfileset src="dist/lib/mail.jar" />
+            <zipfileset src="dist/lib/mysql-connector-java-5.1.35-bin.jar" />
+            <zipfileset src="dist/lib/swing-layout-1.0.4.jar"/>
         </jar>
     </target>
 

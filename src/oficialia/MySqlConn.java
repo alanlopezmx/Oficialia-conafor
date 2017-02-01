@@ -25,7 +25,7 @@ public class MySqlConn {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connectionUrl =
-                     "jdbc:mysql://localhost/conaforOficialia?"
+                     "jdbc:mysql://10.15.1.27/conaforOficialia?"
                     +"user=root&password=CNFAGS2K17";
             
             conn = DriverManager.getConnection(connectionUrl);

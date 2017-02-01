@@ -107,7 +107,7 @@ public class Email {
             System.out.println("Tu mensaje ha sido enviado");
 
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            System.out.println(e);
         }
     }
 
@@ -157,6 +157,7 @@ public class Email {
 
 
         } catch (MessagingException e) {
+            System.out.println(e);
             return false;
         }
     }

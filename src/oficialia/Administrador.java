@@ -316,9 +316,7 @@ public class Administrador extends javax.swing.JFrame {
                     }
                 }
                 img = new BufferedImage[n];
-                System.out.println("id-" + oficioId + " " + oficioAño + " " + n);
                 for (int i = 0; i < n; i++) {
-                    System.out.println("entro");
                     Blob blob = objConn.rs.getBlob(1);
                     byte[] data = blob.getBytes(1, (int) blob.length());
                     try {
@@ -415,28 +413,6 @@ public class Administrador extends javax.swing.JFrame {
             htmlEmail += "</ul>"
                     + "<p><strong>Observaciones:</strong></p>"
                     + "<p>" + obs + "</p>";
-            System.out.println(htmlEmail);
-            if (jCheckBox1.isSelected()) {
-                insertTrabajador_oficio("ADMINISTRATIVO");
-            }
-            if (jCheckBox2.isSelected()) {
-                insertTrabajador_oficio("ANALISIS");
-            }
-            if (jCheckBox3.isSelected()) {
-                insertTrabajador_oficio("JURIDICO");
-            }
-            if (jCheckBox4.isSelected()) {
-                insertTrabajador_oficio("OPERATIVO");
-            }
-            if (jCheckBox5.isSelected()) {
-                insertTrabajador_oficio("RESTAURACION");
-            }
-            if (jCheckBox6.isSelected()) {
-                insertTrabajador_oficio("PRODUCCION");
-            }
-            if (jCheckBox7.isSelected()) {
-                insertTrabajador_oficio("PROTECCION");
-            }
             boolean enviado = false;
             Worker worker = new Worker(email, password, host, Worker.SEND_EMAIL);
             worker.setAsunto(asunto.getText());
@@ -467,6 +443,27 @@ public class Administrador extends javax.swing.JFrame {
                         "Email enviado exitosamente.",
                         "Exito",
                         JOptionPane.INFORMATION_MESSAGE);
+                if (jCheckBox1.isSelected()) {
+                    insertTrabajador_oficio("ADMINISTRATIVO");
+                }
+                if (jCheckBox2.isSelected()) {
+                    insertTrabajador_oficio("ANALISIS");
+                }
+                if (jCheckBox3.isSelected()) {
+                    insertTrabajador_oficio("JURIDICO");
+                }
+                if (jCheckBox4.isSelected()) {
+                    insertTrabajador_oficio("OPERATIVO");
+                }
+                if (jCheckBox5.isSelected()) {
+                    insertTrabajador_oficio("RESTAURACION");
+                }
+                if (jCheckBox6.isSelected()) {
+                    insertTrabajador_oficio("PRODUCCION");
+                }
+                if (jCheckBox7.isSelected()) {
+                    insertTrabajador_oficio("PROTECCION");
+                }
             } else {
                 JOptionPane.showMessageDialog(this,
                         "Ocurrio un error al enviar el email, revise su conexion a internet",
